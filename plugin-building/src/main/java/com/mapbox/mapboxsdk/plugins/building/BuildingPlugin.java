@@ -1,4 +1,4 @@
-package com.mapbox.androidsdk.plugins.building;
+package com.mapbox.mapboxsdk.plugins.building;
 
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
@@ -22,10 +22,12 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillExtrusionOpa
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
 /**
- * The building plugin allows to add 3d buildings FillExtrusionLayer to the Mapbox Maps SDK for Android v5.1.0.
+ * The building plugin allows to add 3d buildings FillExtrusionLayer to the Mapbox Maps SDK for
+ * Android v5.1.0 and higher.
  * <p>
- * Initialise this plugin in the {@link com.mapbox.mapboxsdk.maps.OnMapReadyCallback#onMapReady(MapboxMap)} and provide
- * a valid instance of {@link MapView} and {@link MapboxMap}.
+ * Initialize this plugin inside the
+ * {@link com.mapbox.mapboxsdk.maps.OnMapReadyCallback#onMapReady(MapboxMap)} and provide a valid
+ * instance of {@link MapView} and {@link MapboxMap}.
  * </p>
  * <ul>
  * <li>Use {@link #setVisibility(boolean)}} to show buildings from this plugin.</li>
@@ -144,15 +146,17 @@ public final class BuildingPlugin {
   }
 
   /**
-   * Change the building min zoom level. This is the minimum zoom level where buildings will start to show. useful to
+   * Change the building min zoom level. This is the minimum zoom level where buildings will start
+   * to show. useful to
    * limit showing buildings at higher zoom levels.
    *
-   * @param minZoomLevel a {@code float} value between the maps minimum and maximum zoom level which defines at which
-   *                     level the buildings should show up
+   * @param minZoomLevel a {@code float} value between the maps minimum and maximum zoom level which
+   *                     defines at which level the buildings should show up
    * @since 0.1.0
    */
-  public void setMinZoomLevel(@FloatRange(from = MapboxConstants.MINIMUM_ZOOM, to = MapboxConstants.MAXIMUM_ZOOM)
-                                float minZoomLevel) {
+  public void setMinZoomLevel(
+    @FloatRange(from = MapboxConstants.MINIMUM_ZOOM, to = MapboxConstants.MAXIMUM_ZOOM)
+      float minZoomLevel) {
     this.minZoomLevel = minZoomLevel;
     fillExtrusionLayer.setMinZoom(minZoomLevel);
   }
