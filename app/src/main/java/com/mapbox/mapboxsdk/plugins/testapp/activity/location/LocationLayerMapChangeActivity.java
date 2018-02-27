@@ -1,11 +1,15 @@
 package com.mapbox.mapboxsdk.plugins.testapp.activity.location;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.mapbox.android.core.location.LocationEngine;
+import com.mapbox.android.core.location.LocationEnginePriority;
+import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -13,9 +17,6 @@ import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.plugins.testapp.R;
 import com.mapbox.mapboxsdk.plugins.testapp.Utils;
-import com.mapbox.services.android.location.LostLocationEngine;
-import com.mapbox.services.android.telemetry.location.LocationEngine;
-import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,10 +46,11 @@ public class LocationLayerMapChangeActivity extends AppCompatActivity implements
     mapView.getMapAsync(this);
   }
 
+  @SuppressLint("MissingPermission")
   @Override
   public void onMapReady(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    locationEngine = LostLocationEngine.getLocationEngine(this);
+    locationEngine = new LocationEngineProvider(this).obtainBestLocationEngineAvailable();
     locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
     locationEngine.activate();
     locationPlugin = new LocationLayerPlugin(mapView, mapboxMap, locationEngine);
@@ -62,6 +64,7 @@ public class LocationLayerMapChangeActivity extends AppCompatActivity implements
     }
   }
 
+  @SuppressLint("MissingPermission")
   @Override
   protected void onStart() {
     super.onStart();

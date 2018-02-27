@@ -13,7 +13,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
-import com.mapbox.services.commons.geojson.Point;
+import com.mapbox.geojson.Point;
 
 final class Utils {
 
@@ -89,12 +89,9 @@ final class Utils {
     // Method is used to interpolate the user icon animation.
     @Override
     public Point evaluate(float fraction, Point startValue, Point endValue) {
-      return Point.fromCoordinates(new double[] {
-        startValue.getCoordinates().getLongitude() + (
-          (endValue.getCoordinates().getLongitude() - startValue.getCoordinates().getLongitude()) * fraction),
-        startValue.getCoordinates().getLatitude() + (
-          (endValue.getCoordinates().getLatitude() - startValue.getCoordinates().getLatitude()) * fraction)
-      });
+      return Point.fromLngLat(startValue.longitude() + ((endValue.longitude() - startValue.longitude()) * fraction),
+        startValue.latitude() + ((endValue.latitude() - startValue.latitude()) * fraction)
+      );
     }
   }
 

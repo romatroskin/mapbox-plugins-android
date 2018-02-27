@@ -14,6 +14,9 @@ import android.support.v7.app.AppCompatDelegate;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
+import com.mapbox.android.core.location.LocationEngine;
+import com.mapbox.android.core.location.LocationEngineListener;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -21,9 +24,6 @@ import com.mapbox.mapboxsdk.maps.MapView.OnMapChangedListener;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.MapboxMap.OnCameraMoveListener;
 import com.mapbox.mapboxsdk.maps.MapboxMap.OnMapClickListener;
-import com.mapbox.services.android.telemetry.location.LocationEngine;
-import com.mapbox.services.android.telemetry.location.LocationEngineListener;
-import com.mapbox.services.commons.geojson.Point;
 
 import timber.log.Timber;
 
@@ -48,7 +48,7 @@ import static com.mapbox.mapboxsdk.plugins.locationlayer.Utils.shortestRotation;
  * to disable the Location Layer but keep the instance around till the activity is destroyed.
  * <p>
  * Using this plugin requires you to request permission beforehand manually or using
- * {@link com.mapbox.services.android.telemetry.permissions.PermissionsManager}. Either
+ * {@link com.mapbox.android.core.permissions.PermissionsManager}. Either
  * {@code ACCESS_COARSE_LOCATION} or {@code ACCESS_FINE_LOCATION} permissions can be requested and
  * this plugin work as expected.
  *
@@ -558,8 +558,8 @@ public final class LocationLayerPlugin implements LocationEngineListener, Compas
     staleStateRunnable.updateLatestLocationTime();
 
     // Convert the new location to a Point object.
-    Point newPoint = Point.fromCoordinates(new double[] {location.getLongitude(),
-      location.getLatitude()});
+    Point newPoint = Point.fromLngLat(location.getLongitude(),
+      location.getLatitude());
 
     // If the source doesn't have geometry, a Point gets added.
     if (previousPoint == null) {
@@ -569,7 +569,7 @@ public final class LocationLayerPlugin implements LocationEngineListener, Compas
     }
 
     // Do nothing if the location source's current Point is identical to the new location Point.
-    if (previousPoint.getCoordinates().equals(newPoint.getCoordinates())) {
+    if (previousPoint.coordinates().equals(newPoint.coordinates())) {
       return;
     }
     locationChangeAnimate(previousPoint, newPoint);

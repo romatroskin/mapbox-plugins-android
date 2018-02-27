@@ -1,5 +1,6 @@
 package com.mapbox.mapboxsdk.plugins.testapp.activity.location;
 
+import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
@@ -9,6 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.mapbox.android.core.location.LocationEngine;
+import com.mapbox.android.core.location.LocationEngineListener;
+import com.mapbox.android.core.location.LocationEnginePriority;
+import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -18,10 +23,6 @@ import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.OnLocationLayerClickListener;
 import com.mapbox.mapboxsdk.plugins.testapp.R;
-import com.mapbox.services.android.location.LostLocationEngine;
-import com.mapbox.services.android.telemetry.location.LocationEngine;
-import com.mapbox.services.android.telemetry.location.LocationEngineListener;
-import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,13 +85,18 @@ public class LocationLayerModesActivity extends AppCompatActivity implements OnM
     locationLayerPlugin.setLocationLayerEnabled(LocationLayerMode.NAVIGATION);
   }
 
+  @SuppressLint("MissingPermission")
   @Override
   public void onMapReady(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    locationEngine = new LostLocationEngine(this);
+    locationEngine = new LocationEngineProvider(this).obtainBestLocationEngineAvailable();
     locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
     locationEngine.addLocationEngineListener(this);
     locationEngine.activate();
+    Location lastLocation = locationEngine.getLastLocation();
+    if (lastLocation != null) {
+      onLocationChanged(lastLocation);
+    }
     locationLayerPlugin = new LocationLayerPlugin(mapView, mapboxMap, locationEngine);
     locationLayerPlugin.setOnLocationClickListener(this);
     getLifecycle().addObserver(locationLayerPlugin);
