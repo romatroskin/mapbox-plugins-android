@@ -64,7 +64,6 @@ public final class LocationLayerPlugin implements LifecycleObserver {
   private LocationLayerCamera locationLayerCamera;
 
   private LocationLayerAnimator locationLayerAnimator;
-  private Location lastLocation;
 
   private boolean isEnabled;
   private StaleStateManager staleStateManager;
@@ -133,7 +132,6 @@ public final class LocationLayerPlugin implements LifecycleObserver {
    * @since 0.5.0
    */
   @RequiresPermission(anyOf = {ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION})
-
   public void setLocationLayerEnabled(boolean isEnabled) {
     if (isEnabled) {
       enableLocationLayerPlugin();
@@ -547,17 +545,12 @@ public final class LocationLayerPlugin implements LifecycleObserver {
     if (location == null) {
       return;
     }
-
     staleStateManager.updateLatestLocationTime();
-    if (lastLocation != null) {
-      locationLayerAnimator.feedNewLocation(lastLocation, location);
-    }
-
-    lastLocation = location;
+    locationLayerAnimator.feedNewLocation(location);
   }
 
   private void updateCompassHeading(float heading) {
-    locationLayerAnimator.feedNewCompassBearing(compassManager.getLastHeading(), heading);
+    locationLayerAnimator.feedNewCompassBearing(heading);
   }
 
   /**
