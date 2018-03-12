@@ -43,9 +43,10 @@ import static com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerConstants.
 import static com.mapbox.mapboxsdk.plugins.locationlayer.Utils.generateShadow;
 import static com.mapbox.mapboxsdk.plugins.locationlayer.Utils.getBitmapFromDrawable;
 import static com.mapbox.mapboxsdk.plugins.locationlayer.Utils.getDrawable;
-import static com.mapbox.mapboxsdk.style.functions.Function.zoom;
-import static com.mapbox.mapboxsdk.style.functions.stops.Stop.stop;
-import static com.mapbox.mapboxsdk.style.functions.stops.Stops.exponential;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.exponential;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.interpolate;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.stop;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
 import static com.mapbox.mapboxsdk.style.layers.Property.ICON_ROTATION_ALIGNMENT_MAP;
 import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
 import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
@@ -148,14 +149,14 @@ final class LocationLayer {
     SymbolLayer navigationLayer = new SymbolLayer(NAVIGATION_LAYER, LOCATION_SOURCE).withProperties(
       iconAllowOverlap(true),
       iconIgnorePlacement(true),
-      iconSize(zoom(
-        exponential(
-          stop(22f, iconSize(1f)),
-          stop(12f, iconSize(1f)),
-          stop(10f, iconSize(0.6f)),
-          stop(0f, iconSize(0.6f))
-        ).withBase(1f)
-      )),
+      iconSize(interpolate(
+        exponential(1f), zoom(),
+        stop(22f, 1f),
+        stop(12f, 1f),
+        stop(10f, 0.6f),
+        stop(0f, 0.6f)
+        )
+      ),
       iconRotationAlignment(ICON_ROTATION_ALIGNMENT_MAP));
 
     addLayerToMap(navigationLayer, null);
@@ -209,12 +210,12 @@ final class LocationLayer {
       iconAllowOverlap(true),
       iconIgnorePlacement(true),
       iconRotationAlignment(ICON_ROTATION_ALIGNMENT_MAP),
-      iconSize(zoom(
-        exponential(
-          stop(16f, iconSize(1.2f)),
-          stop(0f, iconSize(1f))
+      iconSize(interpolate(
+        exponential(1f), zoom(),
+        stop(16f, 1.2f),
+        stop(0f, 1f)
         )
-      ))
+      )
     );
     addLayerToMap(layer, beforeLayerId);
   }

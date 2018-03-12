@@ -20,7 +20,7 @@ test:
 	./gradlew test
 
 build-release:
-	./gradlew assembleRelease
+	./gradlew :plugin-locationlayer:assembleRelease
 
 javadoc:
 	# Android modules
@@ -28,7 +28,7 @@ javadoc:
 	./gradlew javadocrelease
 
 publish:
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew uploadArchives
+	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :plugin-locationlayer:uploadArchives
 
 publish-local:
 	# This publishes to ~/.m2/repository/com/mapbox/mapboxsdk
