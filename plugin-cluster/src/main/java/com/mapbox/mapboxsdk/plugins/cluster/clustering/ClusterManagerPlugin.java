@@ -24,7 +24,7 @@ import timber.log.Timber;
 
 /**
  * Groups many items on a map based on zoom level.
- * <p/>
+ * <p></p>
  * ClusterManagerPlugin should be added to the map as an: <ul> <li>{@link MapboxMap.OnCameraIdleListener}</li>
  * <li>{@link MapboxMap.OnMarkerClickListener}</li> </ul>
  * <p>

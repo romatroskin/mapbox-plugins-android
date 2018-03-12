@@ -68,7 +68,7 @@ public class IconGenerator {
 
   /**
    * Creates an icon with the current content and style.
-   * <p/>
+   * <p></p>
    * This method is useful if a custom view has previously been set, or if text content is not
    * applicable.
    */
@@ -108,7 +108,7 @@ public class IconGenerator {
 
   /**
    * Sets the child view for the icon.
-   * <p/>
+   * <p></p>
    * If the view contains a {@link TextView} with the id "text", operations such as {@link
    * #setTextAppearance} and {@link #makeIcon()} will operate upon that {@link TextView}.
    */
